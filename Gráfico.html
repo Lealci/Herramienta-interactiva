@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="parte2.css">
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <title>Gráfico interactivo</title>
+    <style>
+        /* tabs para cambiar entre los 4 gráficos */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            padding: 12px 16px;
+            background-color: #0d1f5c;
+        }
+        .tab-btn {
+            background-color: #18327E;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 13px;
+            transition: background-color 0.2s;
+        }
+        .tab-btn:hover { background-color: #2452C6; }
+        .tab-btn.active { background-color: #4382DF; border-bottom: 3px solid white; }
+
+        /* panel de cada gráfico */
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+
+        /* sliders */
+        .slider-group {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+        .ctrl label {
+            display: block;
+            color: white;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+        .ctrl input[type=range] {
+            width: 100%;
+            accent-color: #4382DF;
+        }
+        .ctrl .val {
+            color: #AACCD6;
+            font-size: 13px;
+            font-family: Arial, Helvetica, sans-serif;
+            margin-top: 2px;
+        }
+        .ctrl input[type=checkbox] { accent-color: #4382DF; }
+        .ctrl select {
+            width: 100%;
+            background: #18327E;
+            color: white;
+            border: 1px solid #4382DF;
+            padding: 6px;
+            border-radius: 4px;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 12px;
+        }
+
+        /* métricas pequeñas */
+        .metric-mini {
+            background: #0d1f5c;
+            border-radius: 6px;
+            padding: 8px 10px;
+            margin: 4px 0;
+            color: white;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 12px;
+        }
+        .metric-mini span {
+            color: #AACCD6;
+            font-size: 11px;
+            display: block;
+        }
+
+        /* gráfico ocupa el .content */
+        .plot-div {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* texto lateral derecho */
+        .izquierda h2 {
+            color: white;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 15px;
+            padding: 0 12px;
+        }
+        .izquierda p {
+            color: #AACCD6;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 12px;
+            padding: 0 12px;
+            line-height: 1.6;
+        }
+
+        /* sidebar h1 */
+        .sidebar h1 {
+            color: white;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            padding: 12px 16px 4px;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">Gráfico interactivo de Radiación de cuerpo negro</div>
+
+    <!-- tabs de navegación entre los gráficos -->
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab(0, this)">01 · Espectro</button>
+        <button class="tab-btn" onclick="switchTab(1, this)">02 · Cuerpo negro</button>
+        <button class="tab-btn" onclick="switchTab(2, this)">03 · Gravedad</button>
+        <button class="tab-btn" onclick="switchTab(3, this)">04 · Anchura EW</button>
+    </div>
+
+    <!-- ESPECTRO OBSERVADO -->
+    <div class="tab-panel active" id="panel-0">
+        <div class="sidebar">
+            <h1>Controles</h1>
+            <div class="slider-group">
+                <div class="ctrl">
+                    <label>Mostrar espectro</label>
+                    <label><input type="checkbox" id="p0-obs" checked onchange="upd0()"> Espectro observado</label>
+                </div>
+                <div class="ctrl">
+                    <label><input type="checkbox" id="p0-err" checked onchange="upd0()"> Barras de error</label>
+                </div>
+                <div class="ctrl">
+                    <label><input type="checkbox" id="p0-bb" checked onchange="upd0()"> Cuerpo negro (~1300 K)</label>
+                </div>
+                <div class="ctrl">
+                    <label><input type="checkbox" id="p0-ki" onchange="upd0()"> Marcar K I / Na I</label>
+                </div>
+                <div class="ctrl">
+                    <label><input type="checkbox" id="p0-h2o" onchange="upd0()"> Marcar H₂O</label>
+                </div>
+                <div class="ctrl">
+                    <label><input type="checkbox" id="p0-log" onchange="upd0()"> Escala logarítmica</label>
+                </div>
+                <div class="metric-mini"><span>Puntos totales</span><strong id="p0-npts">—</strong></div>
+                <div class="metric-mini"><span>Flujo máximo</span><strong id="p0-maxf">—</strong></div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div id="plot0" class="plot-div"></div>
+        </div>
+
+        <div class="izquierda">
+            <h2>¿Qué es este espectro?</h2>
+            <p>VHS 1256 b es un exoplaneta de ~19 masas de Júpiter observado con el telescopio VLT/X-Shooter en Chile.</p>
+            <p>El espectro muestra el flujo de luz emitido entre 1.0 y 2.5 µm. Las caídas abruptas corresponden a bandas de absorción de moléculas (H₂O, CO) y átomos (K I, Na I) en su atmósfera.</p>
+            <p>La línea roja es la radiación de cuerpo negro a ~1300 K: describe la forma general pero no las líneas de absorción.</p>
+        </div>
+
+        <div class="footer"></div>
+    </div>
+
+    <!-- GRÁFICO 1: cuerpo negro y sliders -->
+    <div class="tab-panel" id="panel-1">
+        <div class="sidebar">
+            <h1>Parámetros</h1>
+            <div class="slider-group">
+                <div class="ctrl">
+                    <label>Temperatura T</label>
+                    <input type="range" id="p1-T" min="800" max="2500" step="50" value="1300" oninput="upd1()">
+                    <div class="val" id="p1-Tv">1300 K</div>
+                </div>
+                <div class="ctrl">
+                    <label>Escala log(A)</label>
+                    <input type="range" id="p1-A" min="-17" max="-14" step="0.1" value="-15.3" oninput="upd1()">
+                    <div class="val" id="p1-Av">-15.3</div>
+                </div>
+                <div class="ctrl">
+                    <label><input type="checkbox" id="p1-obs" checked onchange="upd1()"> Espectro observado</label>
+                </div>
+                <div class="ctrl">
+                    <label><input type="checkbox" id="p1-fit" onchange="upd1()"> Mostrar ajuste χ²</label>
+                </div>
+                <button onclick="fitBB()" style="background:#4382DF;color:white;border:none;padding:10px;border-radius:6px;width:100%;cursor:pointer;font-family:Arial;font-size:13px;margin-top:4px;">
+                    ▶ Ajustar automáticamente
+                </button>
+                <div class="metric-mini"><span>λ máx (Wien)</span><strong id="p1-wien">—</strong></div>
+                <div class="metric-mini"><span>T ajustada</span><strong id="p1-Tfit">—</strong></div>
+                <div class="metric-mini"><span>χ² reducido</span><strong id="p1-chi2">—</strong></div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div id="plot1" class="plot-div"></div>
+        </div>
+
+        <div class="izquierda">
+            <h2>Ley de Planck</h2>
+            <p>Todo objeto con temperatura T emite radiación. La distribución de Planck describe un emisor perfecto:</p>
+            <p><em>B(λ,T) = (2hc²/λ⁵) / (exp(hc/λkT) − 1) × A</em></p>
+            <h2>Ley de Wien</h2>
+            <p>El pico de emisión se desplaza a longitudes de onda más cortas al aumentar T:</p>
+            <p><em>λ_max · T = 2898 µm·K</em></p>
+            <p>Mueve el slider de temperatura y observa cómo se desplaza la cúspide del cuerpo negro.</p>
+        </div>
+
+        <div class="footer"></div>
+    </div>
+
+    <!-- GRÁFICO 2: gravedad superficial -->
+    <div class="tab-panel" id="panel-2">
+        <div class="sidebar">
+            <h1>Parámetros</h1>
+            <div class="slider-group">
+                <div class="ctrl">
+                    <label>Edad del planeta</label>
+                    <input type="range" id="p2-age" min="1" max="500" step="1" value="100" oninput="upd2()">
+                    <div class="val" id="p2-agev">100 Myr</div>
+                </div>
+                <div class="metric-mini"><span>Radio (R_J)</span><strong id="p2-R">—</strong></div>
+                <div class="metric-mini"><span>T_eff (K)</span><strong id="p2-T">—</strong></div>
+                <div class="metric-mini"><span>g (cm/s²)</span><strong id="p2-g">—</strong></div>
+                <div class="metric-mini"><span>log(g) [dex]</span><strong id="p2-lg">—</strong></div>
+                <div class="metric-mini"><span>g / g_Tierra</span><strong id="p2-ratio">—</strong></div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div id="plot2" class="plot-div"></div>
+        </div>
+
+        <div class="izquierda">
+            <h2>Gravedad y edad</h2>
+            <p>La gravedad superficial se define como:</p>
+            <p><em>g = GM/R²</em></p>
+            <p>VHS 1256 b no fusiona hidrógeno. Pierde energía térmica y se contrae con el tiempo: R decrece → g aumenta.</p>
+            <p>Medir log(g) equivale a estimar indirectamente la edad del planeta.</p>
+            <p>Datos evolutivos de Baraffe et al. 2015.</p>
+        </div>
+
+        <div class="footer"></div>
+    </div>
+
+    <!-- GRÁFICO 3: anchura equivalente -->
+    <div class="tab-panel" id="panel-3">
+        <div class="sidebar">
+            <h1>Parámetros</h1>
+            <div class="slider-group">
+                <div class="ctrl">
+                    <label>Línea espectral</label>
+                    <select id="p3-line" onchange="upd3()">
+                        <option value="ki1169">K I — 1.169 µm</option>
+                        <option value="ki1252">K I — 1.252 µm</option>
+                        <option value="nai1138">Na I — 1.138 µm</option>
+                    </select>
+                </div>
+                <div class="ctrl">
+                    <label>Ventana (± µm)</label>
+                    <input type="range" id="p3-win" min="0.003" max="0.030" step="0.001" value="0.012" oninput="upd3()">
+                    <div class="val" id="p3-winv">0.012 µm</div>
+                </div>
+                <div class="ctrl">
+                    <label>Nivel continuo ×</label>
+                    <input type="range" id="p3-cont" min="0.5" max="2.0" step="0.05" value="1.0" oninput="upd3()">
+                    <div class="val" id="p3-contv">1.00</div>
+                </div>
+                <div class="metric-mini"><span>EW calculada</span><strong id="p3-ew">—</strong></div>
+                <div class="metric-mini"><span>EW típica VL-G (joven)</span><strong>&lt; 5 Å</strong></div>
+                <div class="metric-mini"><span>EW típica FLD-G (viejo)</span><strong>&gt; 8 Å</strong></div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div id="plot3" class="plot-div"></div>
+        </div>
+
+        <div class="izquierda">
+            <h2>Anchura equivalente</h2>
+            <p>La EW mide la luz absorbida por una línea espectral:</p>
+            <p><em>EW = Σ (1 − F_línea/F_cont) · Δλ</em></p>
+            <p>Las líneas K I (1.169, 1.252 µm) y Na I (1.138 µm) son más fuertes en objetos con mayor gravedad superficial, por lo que son trazadores de la edad.</p>
+            <p>Fuente: Allers &amp; Liu 2013.</p>
+        </div>
+
+        <div class="footer"></div>
+    </div>
+
+    <script>
+
+    // CONSTANTES FÍSICAS
+    const H=6.626e-34, C=2.998e8, KB=1.381e-23;
+    const GC=6.674e-8, MJUP=1.898e30, RJUP=6.9911e9;
+
+    // GENERAR ESPECTRO SINTÉTICO
+    function rng(seed){ let s=seed; return ()=>{ s=(s^(s<<13)); s=(s^(s>>17)); s=(s^(s<<5)); return (s>>>0)/4294967296; }; }
+
+    function genSpec(){
+        const r=rng(42), wav=[], flx=[], err=[];
+        const ranges=[[1.00,1.33],[1.45,1.80],[1.97,2.50]];
+        for(const [a,b] of ranges) for(let w=a; w<=b+1e-9; w+=0.002) wav.push(+w.toFixed(3));
+        const T0=1300, A0=2.0e-15;
+        for(const w of wav){
+            const wm=w*1e-6;
+            let bb=A0*(2*H*C*C/Math.pow(wm,5))/(Math.exp(Math.min(H*C/(wm*KB*T0),700))-1);
+            let h2o=1;
+            if(w>=1.12&&w<=1.16) h2o=0.55+0.45*Math.sin(Math.PI*(w-1.12)/0.04);
+            if(w>=1.30&&w<=1.35) h2o=Math.min(h2o,0.2+0.8*Math.abs((w-1.32)/0.03));
+            if(w>=1.75&&w<=1.80) h2o=0.15+0.85*Math.abs((w-1.775)/0.025);
+            if(w>=1.95&&w<=2.01) h2o=0.15;
+            if(w>=2.44&&w<=2.50) h2o=0.4+0.6*(w-2.44)/0.06;
+            const ki1=Math.exp(-Math.pow((w-1.169)/0.003,2))*0.40;
+            const ki2=Math.exp(-Math.pow((w-1.252)/0.003,2))*0.35;
+            const nai=Math.exp(-Math.pow((w-1.138)/0.004,2))*0.28;
+            let f=bb*h2o*(1-ki1-ki2-nai);
+            f=Math.max(f,0);
+            const e=Math.abs(f)*0.09+A0*0.04;
+            flx.push(f+(r()-0.5)*2*e);
+            err.push(e);
+        }
+        return {wav,flx,err};
+    }
+
+    const D=genSpec();
+    const WAV=D.wav, FLX=D.flx, ERR=D.err;
+
+    function bbFlux(wavArr, T, A){
+        return wavArr.map(w=>{
+            const wm=w*1e-6;
+            const v=A*(2*H*C*C/Math.pow(wm,5))/(Math.exp(Math.min(H*C/(wm*KB*T),700))-1);
+            return isFinite(v)?v:0;
+        });
+    }
+
+    // layout de plotly
+    function layout(title, ylog=false){
+        return {
+            plot_bgcolor:'#1a2f7a',
+            paper_bgcolor:'#4382DF',
+            font:{family:'Arial',color:'white',size:11},
+            title:{text:title, font:{size:13,color:'white'}, x:0.04},
+            xaxis:{title:{text:'Longitud de onda (µm)'},gridcolor:'rgba(255,255,255,0.15)',color:'white'},
+            yaxis:{title:{text:'Flujo (W·m⁻²·µm⁻¹)'},gridcolor:'rgba(255,255,255,0.15)',color:'white',type:ylog?'log':'linear'},
+            legend:{bgcolor:'rgba(17,35,100,0.8)',bordercolor:'rgba(255,255,255,0.2)',borderwidth:1,font:{size:10,color:'white'}},
+            margin:{l:70,r:20,t:45,b:55},
+            hovermode:'x unified',
+        };
+    }
+
+    const CFG={responsive:true, displaylogo:false};
+
+    // tabs
+
+    let currentTab=0;
+    function switchTab(i, btn){
+        document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+        document.getElementById('panel-'+i).classList.add('active');
+        btn.classList.add('active');
+        currentTab=i;
+        setTimeout(()=>{
+            if(i===0) upd0();
+            if(i===1) upd1();
+            if(i===2) upd2();
+            if(i===3) upd3();
+        },50);
+    }
+
+    // ESPECTRO
+    function upd0(){
+        const showObs=document.getElementById('p0-obs').checked;
+        const showErr=document.getElementById('p0-err').checked;
+        const showBB =document.getElementById('p0-bb').checked;
+        const showKI =document.getElementById('p0-ki').checked;
+        const showH2O=document.getElementById('p0-h2o').checked;
+        const useLog =document.getElementById('p0-log').checked;
+
+        const traces=[];
+        if(showErr) traces.push({
+            x:WAV, y:FLX,
+            error_y:{type:'data',array:ERR,visible:true,color:'rgba(170,204,214,0.4)',thickness:1,width:0},
+            mode:'lines', line:{color:'transparent',width:0}, showlegend:false, hoverinfo:'skip'
+        });
+        if(showObs) traces.push({
+            x:WAV, y:FLX, mode:'lines',
+            line:{color:'white',width:1.2}, name:'VHS 1256 b'
+        });
+        if(showBB){
+            const bbF=bbFlux(WAV,1300,2e-15);
+            traces.push({x:WAV, y:bbF, mode:'lines', line:{color:'#AACCD6',width:2,dash:'dot'}, name:'Cuerpo negro 1300K'});
+        }
+
+        const shapes=[], anns=[];
+        if(showKI){
+            for(const [lam,lbl] of [[1.169,'K I'],[1.252,'K I'],[1.138,'Na I']]){
+                shapes.push({type:'line',x0:lam,x1:lam,y0:0,y1:1,yref:'paper',line:{color:'#AACCD6',width:1.5,dash:'dot'}});
+                anns.push({x:lam,y:0.93,yref:'paper',text:lbl,showarrow:false,font:{size:9,color:'#AACCD6'},textangle:-90});
+            }
+        }
+        if(showH2O){
+            for(const [x0,x1,lbl] of [[1.32,1.45,'H₂O'],[1.80,1.97,'H₂O']]){
+                shapes.push({type:'rect',x0,x1,y0:0,y1:1,yref:'paper',fillcolor:'rgba(170,204,214,0.1)',line:{width:0}});
+                anns.push({x:(x0+x1)/2,y:0.88,yref:'paper',text:lbl,showarrow:false,font:{size:9,color:'#AACCD6'}});
+            }
+        }
+
+        const L={...layout('Espectro de VHS 1256-1257 b', useLog), shapes, annotations:anns};
+        Plotly.react('plot0', traces, L, CFG);
+
+        document.getElementById('p0-npts').textContent=WAV.length.toLocaleString();
+        document.getElementById('p0-maxf').textContent=Math.max(...FLX).toExponential(2)+' W·m⁻²·µm⁻¹';
+    }
+
+    // CUERPO NEGRO
+    let fitParams={T:null,A:null};
+
+    function upd1(){
+        const T=+document.getElementById('p1-T').value;
+        const A=Math.pow(10,+document.getElementById('p1-A').value);
+        document.getElementById('p1-Tv').textContent=T+' K';
+        document.getElementById('p1-Av').textContent=(+document.getElementById('p1-A').value).toFixed(1);
+        document.getElementById('p1-wien').textContent=(2898/T).toFixed(2)+' µm';
+
+        const traces=[];
+        if(document.getElementById('p1-obs').checked)
+            traces.push({x:WAV,y:FLX,mode:'lines',line:{color:'white',width:1.2},name:'Espectro obs.'});
+
+        const bbF=bbFlux(WAV,T,A);
+        traces.push({x:WAV,y:bbF,mode:'lines',line:{color:'#AACCD6',width:2},name:`BB manual (${T}K)`});
+
+        if(document.getElementById('p1-fit').checked && fitParams.T!==null){
+            const bbFit=bbFlux(WAV,fitParams.T,fitParams.A);
+            traces.push({x:WAV,y:bbFit,mode:'lines',line:{color:'#ffcc00',width:2,dash:'dash'},name:`Ajuste χ² (${fitParams.T}K)`});
+        }
+
+        Plotly.react('plot1', traces, layout('Ajuste de Cuerpo Negro'), CFG);
+    }
+
+    function fitBB(){
+        function chi2T(T){
+            let num=0,den=0;
+            for(let i=0;i<WAV.length;i++){
+                const wm=WAV[i]*1e-6;
+                const b=(2*H*C*C/Math.pow(wm,5))/(Math.exp(Math.min(H*C/(wm*KB*T),700))-1);
+                num+=b*FLX[i]/(ERR[i]*ERR[i]); den+=b*b/(ERR[i]*ERR[i]);
+            }
+            const A=num/den; let chi2=0;
+            for(let i=0;i<WAV.length;i++){
+                const wm=WAV[i]*1e-6;
+                const f=A*(2*H*C*C/Math.pow(wm,5))/(Math.exp(Math.min(H*C/(wm*KB*T),700))-1);
+                chi2+=Math.pow((f-FLX[i])/ERR[i],2);
+            }
+            return {chi2,A};
+        }
+        let bestT=1000, bestChi2=1e30, bestA=1;
+        for(let T=800;T<=2500;T+=50){ const r=chi2T(T); if(r.chi2<bestChi2){bestChi2=r.chi2;bestT=T;bestA=r.A;} }
+        for(let T=bestT-49;T<=bestT+49;T+=5){ const r=chi2T(T); if(r.chi2<bestChi2){bestChi2=r.chi2;bestT=T;bestA=r.A;} }
+        fitParams={T:bestT,A:bestA};
+        document.getElementById('p1-Tfit').textContent=bestT+' K';
+        document.getElementById('p1-chi2').textContent=(bestChi2/WAV.length).toFixed(2);
+        document.getElementById('p1-T').value=Math.min(2500,Math.max(800,bestT));
+        document.getElementById('p1-fit').checked=true;
+        upd1();
+    }
+
+    // GRAVEDAD SUPERFICIAL
+    const EVOL=[{a:1,R:3.19,T:2504},{a:10,R:1.85,T:2264},{a:100,R:1.25,T:1260},{a:140,R:1.19,T:1210},{a:300,R:1.12,T:1100},{a:500,R:1.09,T:1050}];
+    function interp(age){
+        if(age<=EVOL[0].a) return {...EVOL[0]};
+        if(age>=EVOL[EVOL.length-1].a) return {...EVOL[EVOL.length-1]};
+        for(let i=0;i<EVOL.length-1;i++){
+            if(age>=EVOL[i].a&&age<=EVOL[i+1].a){
+                const t=(age-EVOL[i].a)/(EVOL[i+1].a-EVOL[i].a);
+                return{a:age,R:EVOL[i].R+t*(EVOL[i+1].R-EVOL[i].R),T:EVOL[i].T+t*(EVOL[i+1].T-EVOL[i].T)};
+            }
+        }
+    }
+    const M=13.37*MJUP;
+    const ageArr=Array.from({length:200},(_,i)=>1+i*2.5);
+    const loggArr=ageArr.map(a=>{const e=interp(a);const r=e.R*RJUP;return +Math.log10(GC*M/(r*r)).toFixed(3);});
+    const TArr=ageArr.map(a=>interp(a).T);
+
+    function upd2(){
+        const age=+document.getElementById('p2-age').value;
+        document.getElementById('p2-agev').textContent=age+' Myr';
+        const ev=interp(age);
+        const r=ev.R*RJUP;
+        const g=GC*M/(r*r);
+        const logg=Math.log10(g);
+        document.getElementById('p2-R').textContent=ev.R.toFixed(2)+' R_J';
+        document.getElementById('p2-T').textContent=Math.round(ev.T)+' K';
+        document.getElementById('p2-g').textContent=Math.round(g)+' cm/s²';
+        document.getElementById('p2-lg').textContent=logg.toFixed(2)+' dex';
+        document.getElementById('p2-ratio').textContent=(g/980.6).toFixed(1)+'×';
+
+        const idx=ageArr.findIndex(a=>a>=age);
+        const lgCur=idx>=0?loggArr[idx]:loggArr[loggArr.length-1];
+
+        const traces=[
+            {x:ageArr,y:loggArr,mode:'lines',line:{color:'#AACCD6',width:2},name:'log(g)',yaxis:'y'},
+            {x:ageArr,y:TArr,mode:'lines',line:{color:'#ffcc00',width:2,dash:'dash'},name:'T_eff (K)',yaxis:'y2'},
+            {x:[age],y:[lgCur],mode:'markers',marker:{color:'white',size:12,symbol:'circle',line:{color:'#AACCD6',width:2}},name:'Edad actual',yaxis:'y',showlegend:false},
+            {x:[1,500],y:[4.55,4.55],mode:'lines',line:{color:'rgba(255,255,255,0.3)',width:1,dash:'dot'},name:'log(g) evol. ref.',yaxis:'y'},
+        ];
+
+        const L={
+            ...layout('Evolución de VHS 1256 b — Baraffe et al. 2015'),
+            xaxis:{title:{text:'Edad (Myr)'},type:'log',gridcolor:'rgba(255,255,255,0.15)',color:'white'},
+            yaxis:{title:{text:'log(g) [dex]'},gridcolor:'rgba(255,255,255,0.15)',color:'white',range:[2,6]},
+            yaxis2:{title:{text:'T_eff (K)'},overlaying:'y',side:'right',color:'white',gridcolor:'transparent'},
+        };
+        Plotly.react('plot2', traces, L, CFG);
+    }
+
+    // ANCHURA EQUIVALENTE
+
+    const EW_LINES={
+        ki1169:{lam:1.169,label:'K I 1.169 µm'},
+        ki1252:{lam:1.252,label:'K I 1.252 µm'},
+        nai1138:{lam:1.138,label:'Na I 1.138 µm'},
+    };
+
+    function upd3(){
+        const key=document.getElementById('p3-line').value;
+        const win=+document.getElementById('p3-win').value;
+        const cont=+document.getElementById('p3-cont').value;
+        document.getElementById('p3-winv').textContent=win.toFixed(3)+' µm';
+        document.getElementById('p3-contv').textContent=cont.toFixed(2);
+
+        const line=EW_LINES[key];
+        const lmin=line.lam-win*3.5, lmax=line.lam+win*3.5;
+        const idx=WAV.map((_,i)=>i).filter(i=>WAV[i]>=lmin&&WAV[i]<=lmax);
+        if(idx.length<4){document.getElementById('p3-ew').textContent='sin datos';return;}
+
+        const wSub=idx.map(i=>WAV[i]);
+        const fSub=idx.map(i=>FLX[i]);
+        const eSub=idx.map(i=>ERR[i]);
+        const sorted=[...fSub].sort((a,b)=>a-b);
+        const continuum=sorted[Math.floor(sorted.length*0.85)]*cont;
+
+        let ew=0;
+        for(let k=0;k<wSub.length-1;k++) ew+=(1-fSub[k]/continuum)*(wSub[k+1]-wSub[k]);
+        const ewA=(ew*1e4).toFixed(2);
+        document.getElementById('p3-ew').textContent=ewA+' Å';
+
+        const traces=[
+            {x:WAV,y:FLX,mode:'lines',line:{color:'rgba(255,255,255,0.25)',width:1},name:'Espectro completo',hoverinfo:'skip'},
+            {x:wSub,y:fSub,mode:'lines',line:{color:'white',width:2},name:'Ventana',
+             error_y:{type:'data',array:eSub,visible:true,color:'rgba(170,204,214,0.4)',thickness:1,width:0}},
+            {x:wSub,y:wSub.map(()=>continuum),mode:'lines',line:{color:'#ffcc00',width:2,dash:'dash'},name:'Continuo'},
+            {x:[...wSub,...wSub.slice().reverse()],
+             y:[...wSub.map(()=>continuum),...fSub.slice().reverse()],
+             fill:'toself',fillcolor:'rgba(170,204,214,0.2)',mode:'none',name:'Área EW'},
+            {x:[line.lam,line.lam],y:[0,continuum*1.15],mode:'lines',
+             line:{color:'#AACCD6',width:1.5,dash:'dot'},name:line.label},
+        ];
+
+        const L={
+            ...layout(`Anchura Equivalente — ${line.label}`),
+            xaxis:{title:{text:'Longitud de onda (µm)'},range:[line.lam-win*3.5,line.lam+win*3.5],gridcolor:'rgba(255,255,255,0.15)',color:'white'},
+            annotations:[{x:line.lam,y:continuum*1.08,text:`EW = ${ewA} Å`,showarrow:true,arrowcolor:'#AACCD6',
+                arrowhead:2,font:{size:12,color:'white'},bgcolor:'rgba(17,35,100,0.85)',bordercolor:'#AACCD6',borderwidth:1}]
+        };
+        Plotly.react('plot3', traces, L, CFG);
+    }
+
+    // INIT
+    window.addEventListener('load', ()=>{ upd0(); });
+    </script>
+</body>
+</html>
