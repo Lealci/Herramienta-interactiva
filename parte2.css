@@ -28,7 +28,6 @@ body{
     display: flex;
     justify-content: center;
     flex-direction: column;
-    top: ;
 }
 .content{
     width: 60%;
@@ -51,3 +50,27 @@ body{
     height: 200px;
     background-color: #AACCD6;
 }
+.button{
+    width: 200px;
+    height: 60px;
+    background-color: #4382DF;
+
+    position: absolute;
+    top: 25px;
+    left: 60px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    text-decoration: none;
+    font-size: 35px;
+    box-sizing: border-box;
+}
+a{
+    text-decoration: none;
+}
+.button:hover{
+    background-color: #4647AE;
+}
+
