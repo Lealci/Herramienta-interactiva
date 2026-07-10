@@ -20,29 +20,46 @@ body{
     font-family: Arial, Helvetica, sans-serif;
 
 }
+.tab-panel{
+    display:flex;
+    flex-direction:column;
+    width:100%;
+}
 .sidebar{
-    width: 20%;
-    float: left;
-    height: 700px;
-    background-color: #4647AE;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
+    width:100%;
+    background:#4647AE;
+    padding:15px 25px;
+    box-sizzing:border-box;
+    height:auto;
 }
+.slider-group{
+    display:flex;
+    flex-wrap:wrap;
+    gap:15px;
+    align-items:flex-start;
+}
+.ctrl{
+    min-width:180px;
+}
+
+.metric-mini{
+    min-width:150px;
+}
+
 .content{
-    width: 60%;
-    float: left;
-    background-color: #4382DF;
-    height: 700px;
+    width:75%;
+    float:left;
+    background:#4382DF;
+    height:700px;
 }
+
 .izquierda{
-    width: 20%;
-    float: right;
-    height: 700px;
-    background-color: #4647AE;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
+    width:25%;
+    float:left;
+    height:700px;
+    background:#4647AE;
+    display:flex;
+    flex-direction:column;
 }
 .footer{
     width: 100%;
