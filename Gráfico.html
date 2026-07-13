@@ -36,11 +36,21 @@
         .slider-group {
             padding: 16px;
             display: flex;
-            flex-direction: column;
-            gap: 18px;
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 18px; /*si quieren que sea una pura fila, entonces colocen 20px*/
+            /*y aquí peguen este código: "overflow-x:auto;". Sin las comillas, claro*/
+        }
+        .ctrl{
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
         }
         .ctrl label {
-            display: block;
+            display: flex;
+            align-items: center;
+            gap: 6px;
             color: white;
             font-family: Arial, Helvetica, sans-serif;
             font-size: 13px;
