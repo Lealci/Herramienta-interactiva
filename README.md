@@ -7,3 +7,19 @@ La página permite explorar cuatro conceptos físicos fundamentales a través de
 #### 3. Gravedad superficial
 #### 4. Anchura equivalente
 ### Archivos
+index.html -> página de inicio con navegación
+
+Gráfico.html -> herramienta interactiva principal
+
+Explicaciones.html -> marco teórico
+
+parte1.css -> estilos de la página de inicio
+
+parte2.css -> estilos de la herramienta
+### Implementación técnica
+La herramienta está construida completamente en HTML, CSS y JavaScript. La física originalmente implementada en Python (numpy, scipy, matplotlib) fue traducida a JavaScript puro, y la visualización usa Plotly.js como reemplazo de matplotlib.
+### Modo de uso (Hasta el Sprint 1) 
+#### 1. Descargar todos los archivos en una misma carpeta
+#### 2. Abre index.html en cualquier navegador moderno
+#### 3. No requiere instalación ni conexión a internet (excepto para cargar Plotly.js)
+
