@@ -3,48 +3,238 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="parte1.css">
-    <title>Analizador de Espectros de Atmósferas Exoplanetarias</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="parte3.css">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;1,300;1,400&family=Space+Mono&display=swap" rel="stylesheet">
+    <title>Explicaciones — Espectros de Atmósferas</title>
 </head>
 <body>
-    <div class="stars-background"></div>
-    
-    <header class="main-header">
-        <div class="header-content">
-            <span class="header-tag">HERRAMIENTA INTERACTIVA</span>
-            <h1>Analizador de Espectros de Atmósferas Exoplanetarias</h1>
-            <p class="header-sub">Explora y analiza la composición atmosférica de exoplanetas ✩₊˚.⋆.ೃ࿔*:･</p>
+
+    <header>
+        <a href="index.html" class="back-btn">← Inicio </a>
+        <div class="header-center">
+            <span class="header-tag">VHS 1256-1257 b · VLT/X-Shooter</span>
+            <h1 class="header-title">Espectros de Atmósferas</h1>
+            <p class="header-sub">Marco físico y funcionamiento de la herramienta</p>
         </div>
     </header>
-    
-    <main class="main-content">
-        <div class="contenedor">
-            <a href="Gráfico.html" class="card-link"> 
-                <div class="box">
-                    
-                    <div class="box-content">
-                        <span class="box-title">Gráfico Interactivo</span>
-                        <span class="box-desc">Visualiza espectros en tiempo real (  °ㅁ° ).ᐟ</span>
-                    </div>
-                </div>
-            </a>
-            <a href="Explicaciones.html" class="card-link">
-                <div class="box">
-                    
-                    <div class="box-content">
-                        <span class="box-title">Explicaciones</span>
-                        <span class="box-desc">Aprende sobre los conceptos ૮`⎚⩊⎚´ა</span>
-                    </div>
-                </div>
-            </a>
+
+    <section class="intro">
+        <div class="intro-inner">
+            <p class="intro-lead">
+                VHS 1256-1257 b es un exoplaneta de aproximadamente 19 masas de Júpiter, 
+                observado con el telescopio VLT en Chile. Su espectro de luz contiene información 
+                sobre la temperatura, composición química y gravedad de su atmósfera.
+            </p>
+            <p class="intro-body">
+                Esta herramienta permite explorar cuatro conceptos físicos fundamentales 
+                directamente sobre datos astronómicos reales. Cada gráfico está vinculado a una ley física distinta 
+                y a una pregunta que los astrónomos intentan responder sobre este objeto.
+            </p>
         </div>
-    </main>
-    
-    <footer class="main-footer">
-        <p>2026 — Análisis Espectroscópico de Exoplanetas. Página hecha por estudiantes de Astrofísica con Mención en Ciencia de Datos, USACH.</p>
+    </section>
+
+    <nav class="toc">
+        <div class="toc-inner">
+            <span class="toc-label">Contenido</span>
+            <a href="#espectro" class="toc-link">01 · Espectro</a>
+            <a href="#cuerpo-negro" class="toc-link">02 · Cuerpo negro</a>
+            <a href="#gravedad" class="toc-link">03 · Gravedad</a>
+            <a href="#ew" class="toc-link">04 · Anchura EW</a>
+        </div>
+    </nav>
+
+    <!-- espectro -->
+    <section class="explicacion" id="espectro">
+        <div class="exp-inner">
+            <div class="exp-numero">01</div>
+            <h2 class="exp-titulo">Espectro observado</h2>
+            <p class="exp-pregunta">¿Qué información contiene la luz de un exoplaneta?</p>
+            <div class="dos-col">
+                <div class="col">
+                    <h3 class="col-titulo">Física</h3>
+                    <p>Cuando la luz viaja desde el interior de un planeta hacia el telescopio, atraviesa su atmósfera. Las moléculas y átomos presentes en ella absorben luz a longitudes de onda muy específicas, determinadas por su estructura interna. Lo que llega al detector es la luz que logró escapar sin ser absorbida.</p>
+                    <p>Las <strong>caídas abruptas</strong> que se ven en el espectro corresponden a bandas de absorción de moléculas como H₂O (vapor de agua) y CO (monóxido de carbono), y de átomos como K I (potasio) y Na I (sodio). Cada especie química absorbe en longitudes de onda características, por lo que el espectro actúa como una <em>huella</em> de la atmósfera.</p>
+                    <p>Los <strong>huecos</strong> entre los rangos 1.33–1.45 µm y 1.80–1.97 µm no son absorción del planeta: corresponden a bandas donde la atmósfera <em>terrestre</em> bloquea la luz antes de llegar al detector.</p>
+                    <div class="formula-box">
+                        <span class="formula-label">Unidades del flujo</span>
+                        <span class="formula">W · m⁻² · µm⁻¹</span>
+                        <span class="formula-desc">Energía por unidad de área, por unidad de longitud de onda.</span>
+                    </div>
+                </div>
+                <div class="col">
+                    <h3 class="col-titulo">Funcionamiento</h3>
+                    <p>El gráfico muestra el espectro generado con la misma física del paper de Petrus et al. (2022), usando la ley de Planck a 1300 K como base y añadiendo absorciones moleculares y atómicas.</p>
+                    <div class="control-desc">
+                        <div class="ctrl-item"><span class="ctrl-badge">checkbox</span><span><strong>Espectro observado</strong> — muestra u oculta la curva principal.</span></div>
+                        <div class="ctrl-item"><span class="ctrl-badge">checkbox</span><span><strong>Barras de error</strong> — representan la incerteza del detector en cada punto.</span></div>
+                        <div class="ctrl-item"><span class="ctrl-badge">checkbox</span><span><strong>Cuerpo negro ~1300 K</strong> — superpone la curva de emisión perfecta para comparar.</span></div>
+                        <div class="ctrl-item"><span class="ctrl-badge">checkbox</span><span><strong>K I / Na I</strong> — marca con líneas verticales las posiciones de las líneas atómicas.</span></div>
+                        <div class="ctrl-item"><span class="ctrl-badge">checkbox</span><span><strong>H₂O</strong> — sombrea las bandas de absorción de vapor de agua.</span></div>
+                        <div class="ctrl-item"><span class="ctrl-badge">checkbox</span><span><strong>Escala logarítmica</strong> — útil para ver estructuras en flujos muy distintos.</span></div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+
+    <!-- cuerpo negro -->
+    <section class="explicacion alt" id="cuerpo-negro">
+        <div class="exp-inner">
+            <div class="exp-numero">02</div>
+            <h2 class="exp-titulo">Radiación de cuerpo negro</h2>
+            <p class="exp-pregunta">¿A qué temperatura está el planeta?</p>
+            <div class="dos-col">
+                <div class="col">
+                    <h3 class="col-titulo">Física</h3>
+                    <p>Todo objeto con temperatura mayor a 0 K emite radiación electromagnética. Un <strong>cuerpo negro</strong> es un emisor perfecto que no tiene atmósfera: su espectro es una curva suave descrita por la <strong>ley de Planck</strong>:</p>
+                    <div class="formula-box">
+                        <span class="formula-label">Ley de Planck</span>
+                        <span class="formula">B(λ, T) = (2hc² / λ⁵) · 1 / (exp(hc/λkT) − 1)</span>
+                        <span class="formula-desc">h = Planck · c = velocidad de la luz · k = Boltzmann</span>
+                    </div>
+                    <p>La temperatura controla el <strong>brillo total</strong> y la posición del <strong>pico de emisión</strong>. La <strong>ley de Wien</strong> establece que ese pico se mueve a longitudes de onda más cortas al aumentar la temperatura:</p>
+                    <div class="formula-box">
+                        <span class="formula-label">Ley de Wien</span>
+                        <span class="formula">λ_max · T = 2898 µm · K</span>
+                        <span class="formula-desc">Para VHS 1256 b a ~1300 K → λ_max ≈ 2.23 µm</span>
+                    </div>
+                    <p>El cuerpo negro describe bien la <em>forma general</em> del espectro, pero no las líneas de absorción. Un planeta real tiene atmósfera que modifica el espectro respecto al emisor perfecto.</p>
+                </div>
+                <div class="col">
+                    <h3 class="col-titulo">Funcionamiento</h3>
+                    <p>El ajuste automático minimiza el estadístico χ², que mide qué tan diferente es el modelo del espectro observado. El algoritmo prueba temperaturas entre 800 y 2500 K y encuentra la que produce el menor χ².</p>
+                    <div class="formula-box">
+                        <span class="formula-label">Chi cuadrado</span>
+                        <span class="formula">χ² = Σ [ (F_modelo − F_obs) / σ ]²</span>
+                        <span class="formula-desc">σ = error observacional en cada punto</span>
+                    </div>
+                    <div class="control-desc">
+                        <div class="ctrl-item"><span class="ctrl-badge">slider</span><span><strong>Temperatura T</strong> — desplaza el pico del cuerpo negro en tiempo real.</span></div>
+                        <div class="ctrl-item"><span class="ctrl-badge">slider</span><span><strong>Escala log(A)</strong> — controla la amplitud del modelo en escala logarítmica.</span></div>
+                        <div class="ctrl-item"><span class="ctrl-badge">botón</span><span><strong>Ajustar automáticamente</strong> — ejecuta el ajuste por minimización de χ².</span></div>
+                        <div class="ctrl-item"><span class="ctrl-badge">métrica</span><span><strong>λ máx (Wien)</strong> — se calcula en tiempo real según la temperatura del slider.</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="dato-clave">
+                <span class="dato-icon">✦</span>
+                El ajuste atmosférico de Petrus et al. (2022) obtiene T_eff = 1380 ± 54 K. El cuerpo negro simple tiende a dar valores distintos porque no modela las absorciones de la atmósfera.
+            </div>
+        </div>
+    </section>
+
+    <!-- gravedad -->
+    <section class="explicacion" id="gravedad">
+        <div class="exp-inner">
+            <div class="exp-numero">03</div>
+            <h2 class="exp-titulo">Gravedad superficial</h2>
+            <p class="exp-pregunta">¿Cuántos años tiene el planeta?</p>
+            <div class="dos-col">
+                <div class="col">
+                    <h3 class="col-titulo">Física</h3>
+                    <p>La <strong>gravedad superficial</strong> es la aceleración gravitacional en la superficie de un objeto. Depende de su masa y de su radio:</p>
+                    <div class="formula-box">
+                        <span class="formula-label">Gravedad superficial</span>
+                        <span class="formula">g = G · M / R²</span>
+                        <span class="formula-desc">G = constante gravitacional · M = masa · R = radio</span>
+                    </div>
+                    <p>VHS 1256 b tiene masa fija de ~13.37 masas de Júpiter y <strong>no fusiona hidrógeno</strong>. Sin fusión nuclear, el único soporte contra la gravedad es la energía térmica. Al perder calor hacia el espacio, el planeta se <em>contrae</em>: R disminuye → g aumenta.</p>
+                    <p>Esto conecta log(g) con la edad: un objeto joven tiene radio grande y log(g) bajo; uno viejo tiene radio pequeño y log(g) alto.</p>
+                    <div class="tabla-simple">
+                        <div class="tabla-header"><span>Edad</span><span>Radio (R_J)</span><span>log(g)</span></div>
+                        <div class="tabla-fila"><span>1 Myr</span><span>3.19</span><span>~3.2</span></div>
+                        <div class="tabla-fila"><span>100 Myr</span><span>1.25</span><span>~4.5</span></div>
+                        <div class="tabla-fila"><span>500 Myr</span><span>1.09</span><span>~4.8</span></div>
+                        <div class="tabla-note">Datos: Baraffe et al. 2015</div>
+                    </div>
+                </div>
+                <div class="col">
+                    <h3 class="col-titulo">Funcionamiento</h3>
+                    <p>El gráfico muestra cómo evolucionan log(g) y T_eff con la edad, usando los modelos evolutivos de Baraffe et al. (2015). Para edades intermedias, la herramienta interpola linealmente entre los puntos de la tabla del paper.</p>
+                    <div class="control-desc">
+                        <div class="ctrl-item"><span class="ctrl-badge">slider</span><span><strong>Edad del planeta</strong> — entre 1 y 500 millones de años. Se recalcula g = GM/R² en tiempo real.</span></div>
+                        <div class="ctrl-item"><span class="ctrl-badge">métrica</span><span><strong>Radio</strong> — en radios de Júpiter. Disminuye con la edad.</span></div>
+                        <div class="ctrl-item"><span class="ctrl-badge">métrica</span><span><strong>T_eff</strong> — temperatura efectiva en Kelvin. Disminuye con la edad.</span></div>
+                        <div class="ctrl-item"><span class="ctrl-badge">métrica</span><span><strong>log(g)</strong> — en dex. Aumenta con la edad al contraerse el planeta.</span></div>
+                        <div class="ctrl-item"><span class="ctrl-badge">métrica</span><span><strong>g / g_Tierra</strong> — cuántas veces es más intensa que la gravedad terrestre (980.6 cm/s²).</span></div>
+                    </div>
+                    <p style="margin-top:12px;font-size:0.88rem;color:#666;">La línea horizontal punteada marca log(g) = 4.55, correspondiente a una edad de ~150–300 Myr.</p>
+                </div>
+            </div>
+            <div class="dato-clave">
+                <span class="dato-icon">✦</span>
+                Existe una discrepancia entre el log(g) de modelos atmosféricos (~3.5–4.0 dex) y el de modelos evolutivos (~4.55 dex). Este es un problema abierto en la caracterización de objetos subestelares jóvenes.
+            </div>
+        </div>
+    </section>
+
+    <!-- anchura -->
+    <section class="explicacion alt" id="ew">
+        <div class="exp-inner">
+            <div class="exp-numero">04</div>
+            <h2 class="exp-titulo">Anchura equivalente</h2>
+            <p class="exp-pregunta">¿Qué revelan las líneas atómicas sobre la edad?</p>
+            <div class="dos-col">
+                <div class="col">
+                    <h3 class="col-titulo">Física</h3>
+                    <p>Las líneas de <strong>K I</strong> (potasio neutro) a 1.169 y 1.252 µm y de <strong>Na I</strong> (sodio neutro) a 1.138 µm son muy sensibles a la presión en la fotosfera del planeta. Una mayor gravedad superficial implica mayor presión, lo que ensancha y profundiza estas líneas.</p>
+                    <p>La <strong>anchura equivalente (EW)</strong> cuantifica cuánta luz fue absorbida por una línea, independientemente de si es ancha o angosta:</p>
+                    <div class="formula-box">
+                        <span class="formula-label">Anchura equivalente</span>
+                        <span class="formula">EW = Σ (1 − F_línea / F_continuo) · Δλ</span>
+                        <span class="formula-desc">F_línea = flujo observado · F_continuo = nivel sin absorción · Δλ = paso en longitud de onda</span>
+                    </div>
+                    <p>Como log(g) aumenta con la edad, la EW de K I y Na I también aumenta. Esto convierte estas líneas en <em>relojes estelares</em>:</p>
+                    <div class="tabla-simple">
+                        <div class="tabla-header"><span>Clasificación</span><span>EW típica K I</span></div>
+                        <div class="tabla-fila"><span>VL-G (muy joven)</span><span>&lt; 5 Å</span></div>
+                        <div class="tabla-fila"><span>INT-G (intermedio)</span><span>5 – 8 Å</span></div>
+                        <div class="tabla-fila"><span>FLD-G (viejo)</span><span>&gt; 8 Å</span></div>
+                        <div class="tabla-note">Fuente: Allers & Liu 2013</div>
+                    </div>
+                </div>
+                <div class="col">
+                    <h3 class="col-titulo">Funcionamiento</h3>
+                    <p>La herramienta extrae una ventana del espectro alrededor de la línea seleccionada, estima el nivel del continuo como el percentil 85 del flujo en esa ventana, y calcula numéricamente la integral de la fórmula de EW.</p>
+                    <div class="control-desc">
+                        <div class="ctrl-item"><span class="ctrl-badge">menú</span><span><strong>Línea espectral</strong> — elige entre K I 1.169 µm, K I 1.252 µm y Na I 1.138 µm.</span></div>
+                        <div class="ctrl-item"><span class="ctrl-badge">slider</span><span><strong>Ventana (± µm)</strong> — define el rango del espectro incluido en el cálculo.</span></div>
+                        <div class="ctrl-item"><span class="ctrl-badge">slider</span><span><strong>Nivel continuo ×</strong> — escala el continuo estimado. Permite ajustar si el percentil automático no captura bien el techo del espectro.</span></div>
+                        <div class="ctrl-item"><span class="ctrl-badge">métrica</span><span><strong>EW calculada</strong> — resultado en Ångström, actualizado en tiempo real.</span></div>
+                    </div>
+                    <p style="margin-top:12px;font-size:0.88rem;color:#666;">El área sombreada en el gráfico visualiza la región que se integra entre el continuo y el espectro observado.</p>
+                </div>
+            </div>
+            <div class="dato-clave">
+                <span class="dato-icon">✦</span>
+                La EW de K I calculada para VHS 1256 b es sustancialmente menor que la de objetos de campo (FLD-G), confirmando su clasificación como objeto de muy baja gravedad (VL-G) y edad joven de 150–300 Myr.
+            </div>
+        </div>
+    </section>
+
+    <!-- referencias -->
+    <section class="referencias">
+        <div class="ref-inner">
+            <h3 class="ref-titulo">Referencias</h3>
+            <ul class="ref-lista">
+                <li>Petrus, S., Chauvin, G., Bonnefoy, M., Tremblin, P., Charnay, B., Delorme, P., Marleau, G.-D., Bayo, A., Manjavacas, E., Lagrange, A.-M., Mollière, P., Palma-Bifani, P., Biller, B., Jenkins, J.-S., Goyal, J.-M., & Hoch, K. (2023). <em>X-SHYNE: X-shooter spectra of young exoplanet analogs: I. A medium-resolution 0.65–2.5μm one-shot spectrum of VHS 1256−1257 b</em>. Astronomy & Astrophysics, 670, L9. <a href="https://doi.org/10.48550/arXiv.2207.06622" target="_blank">https://doi.org/10.48550/arXiv.2207.06622</a></li>
+                <li>Baraffe, I., Homeier, D., Allard, F., & Chabrier, G. (2015). <em>New evolutionary models for pre-main sequence and main sequence low-mass stars down to the hydrogen-burning limit</em>. Astronomy and Astrophysics, 577, A42. <a href="https://doi.org/10.1051/0004-6361/201425481" target="_blank">https://doi.org/10.1051/0004-6361/201425481</a></li>
+                <li>Allers, K. N., & Liu, M. C. (2013). <em>A near-infrared spectroscopic study of young field ultracool dwarfs</em>. The Astrophysical Journal, 772(2), 79. <a href="https://doi.org/10.1088/0004-637X/772/2/79" target="_blank">https://doi.org/10.1088/0004-637X/772/2/79</a></li>
+                <li>Morley, C. V., Mukherjee, S., Marley, M. S., Fortney, J. J., Visscher, C., Lupu, R., Gharib-Nezhad, E., Thorngren, D., Freedman, R., & Batalha, N. (2024). <em>The Sonora substellar atmosphere models III. Diamondback: Atmospheric properties, spectra, and evolution for warm cloudy substellar objects</em>. The Astrophysical Journal, 975, 59. <a href="https://doi.org/10.3847/1538-4357/ad71d5" target="_blank">https://doi.org/10.3847/1538-4357/ad71d5</a></li>
+            </ul>
+            <h3 class="ref-titulo" style="margin-top: 24px;">Libros</h3>
+            <ul class="ref-lista">
+                <li>LeBlanc, F. (2010). <em>An introduction to stellar astrophysics</em>. John Wiley & Sons, Ltd.</li>
+                <li>Carroll, B. W., & Ostlie, D. A. (2017). <em>An introduction to modern astrophysics</em> (2nd ed.). Cambridge University Press.</li>
+            </ul>
+        </div>
+    </section>
+
+    <footer>
+        <span>Herramienta Interactiva: Espectros de Atmósferas · USACH 2026</span>
+        <a href="index.html">← Volver al inicio</a>
     </footer>
+
 </body>
 </html>
