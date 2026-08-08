@@ -6,24 +6,25 @@ La página permite explorar cuatro conceptos físicos fundamentales a través de
 #### 2. Cuerpo negro
 #### 3. Gravedad superficial
 #### 4. Anchura equivalente
-### Archivos
-index.html -> página de inicio con navegación
+  Adicional a esto, hay una página de explicaciones que aborda la física y el funcionamiento de cada uno de los gráficos.
+### Archivos.
+index.html -> Página de inicio con navegación
 
-Gráfico.html -> herramienta interactiva principal
+Gráfico.html -> Herramienta interactiva principal
 
-Explicaciones.html -> marco teórico
+Explicaciones.html -> Marco teórico
 
-parte1.css -> estilos de la página de inicio
+parte1.css -> Estilos de la página de inicio
 
-parte2.css -> estilos de la herramienta
+parte2.css -> Estilos de la herramienta
+
+parte3.css -> Estilos de la página de explicaciones
+
 ### Implementación técnica
 La herramienta está construida completamente en HTML, CSS y JavaScript. La física originalmente implementada en Python (numpy, scipy, matplotlib) fue traducida a JavaScript puro, y la visualización usa Plotly.js como reemplazo de matplotlib.
-### Modo de uso si no desea descargar los archivos
-#### 1. Acceder al link proporcionado: https://lealci.github.io/Herramienta-interactiva/
-### Modo de uso si desea descargar los archivos
-#### 1. Descargar todos los archivos en una misma carpeta.
-#### 2. Abre index.html en cualquier navegador moderno.
+### Modo de uso.
+#### Acceder al link proporcionado: https://lealci.github.io/Herramienta-interactiva/
 ### Aclaraciones de uso
-#### - Este proyecto ya no requiere descargar y alojar de manera obligatoria los archivos que la componen, sin embargo estos se pueden descargar si el usuario lo desea.
-#### - No requiere instalación ni conexión a internet (excepto para cargar Plotly.js).
+#### - Este proyecto no requiere descargar y alojar de manera obligatoria los archivos que la componen, sin embargo, los archivos están a libre disposición en caso de que algún usuario y/o docente quiera editar las limitaciones físicas de la herramienta para visualizar otro objeto.
+#### - Al ser una página web, solamente se necesita una conexión a internet estable para visualizarla.
 #### - El uso del sitio web no necesita componentes de hardware mínimos, solamente los que requiere por naturaleza el uso del navegador en el que se abrirá.
