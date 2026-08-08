@@ -18,8 +18,12 @@ parte1.css -> estilos de la página de inicio
 parte2.css -> estilos de la herramienta
 ### Implementación técnica
 La herramienta está construida completamente en HTML, CSS y JavaScript. La física originalmente implementada en Python (numpy, scipy, matplotlib) fue traducida a JavaScript puro, y la visualización usa Plotly.js como reemplazo de matplotlib.
-### Modo de uso (Hasta el Sprint 1) 
-#### 1. Descargar todos los archivos en una misma carpeta
-#### 2. Abre index.html en cualquier navegador moderno
-#### 3. No requiere instalación ni conexión a internet (excepto para cargar Plotly.js)
-
+### Modo de uso si no desea descargar los archivos
+#### 1. Acceder al link proporcionado: https://lealci.github.io/Herramienta-interactiva/
+### Modo de uso si desea descargar los archivos.
+#### 1. Descargar todos los archivos en una misma carpeta.
+#### 2. Abre index.html en cualquier navegador moderno.
+### Aclaraciones de uso
+#### -. Este proyecto ya no requiere descargar y alojar de manera obligatoria los archivos que la componen, sin embargo estos se pueden descargar si el usuario lo desea.
+#### -. No requiere instalación ni conexión a internet (excepto para cargar Plotly.js).
+#### -. El uso del sitio web no necesita componentes de hardware mínimos, solamente los que requiere por naturaleza el uso del navegador en el que se abrirá.
